@@ -1,15 +1,16 @@
 import { MongoClient, ServerApiVersion } from 'mongodb'
 
+const uri = process.env.DB_STRING
+export const client = new MongoClient(uri, {
+	serverApi: {
+		version: ServerApiVersion.v1,
+		strict: true,
+		deprecationErrors: true,
+	},
+})
+
 async function run() {
-	const uri = process.env.DB_STRING
 	// Create a MongoClient with a MongoClientOptions object to set the Stable API version
-	const client = new MongoClient(uri, {
-		serverApi: {
-			version: ServerApiVersion.v1,
-			strict: true,
-			deprecationErrors: true,
-		},
-	})
 	try {
 		// Connect the client to the server	(optional starting in v4.7)
 		console.log('LOG', uri)
@@ -25,6 +26,6 @@ async function run() {
 	}
 }
 
-export default function dbConnect() {
+export function dbConnect() {
 	run().catch(console.dir)
 }
