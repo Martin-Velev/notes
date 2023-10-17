@@ -39,7 +39,12 @@ export async function createToken({ id, username }, secret) {
 	const msg = encodedHeader + '.' + encodedPayload
 	const signature = await signMsg(msg, secret)
 
-	return msg + '.' + signature
+	const token = msg + '.' + signature
+
+	console.log('secret', secret)
+	console.log('payload', payload)
+	console.log('token', token)
+	return token
 }
 
 export async function signMsg(msg, secret) {
