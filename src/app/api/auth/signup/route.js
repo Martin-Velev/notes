@@ -1,36 +1,23 @@
 // import dbConnect from '@/lib/dbConnect'
-import { ERR_CODES, SECRET } from '@/constants/constants'
-import { createToken, saltAndHash } from '@/lib/auth'
-import { client } from '@/lib/dbConnect'
+import { SECRET } from '@/constants/constants'
+import { createToken } from '@/lib/auth'
+import dbConnect from '@/lib/dbConnect'
+import User from '@/models/user'
 
 export async function POST(request, params) {
 	const { username, password } = await request.json()
 
-	const database = client.db(process.env.DB_NAME)
+	dbConnect()
+	const user = await User.create({ username, password })
 
-	const userCollection = database.collection('users')
-	const hashedPassword = await saltAndHash(password)
-
-	const userData = {
-		username,
-		password: hashedPassword,
-		createdAt: Date.now,
-	}
-
-	const response = await userCollection.insertOne(userData).catch((e) => {
-		console.log(e)
-		if (e.code === ERR_CODES.DUPLICATE_KEY) {
-			// Username already exists
-			console.log('User already exists')
-		}
-	})
-	console.log('RES', response)
-
+	const secret = SECRET
 	const sanitizedUsr = {
-		username,
-		id: response.insertedId,
+		username: user.username,
+		id: user.id,
+		role: user.role,
+		createdAt: user.createdAt,
 	}
-	const jwt = await createToken(sanitizedUsr, SECRET)
+	const jwt = await createToken(sanitizedUsr, secret)
 
 	const headers = new Headers()
 	headers.append('Content-Type', 'application/json')
