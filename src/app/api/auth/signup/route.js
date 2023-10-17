@@ -9,6 +9,7 @@ export async function POST(request, params) {
 
 	dbConnect()
 	const user = await User.create({ username, password })
+	// TODO Handle duplicate name error
 
 	const secret = SECRET
 	const sanitizedUsr = {
