@@ -21,7 +21,7 @@ Create a new connection. Use the default connection string
 
 ### Run the app
 
-create a `.env.local` file with the following content:
+create a `.env.local` file at the root of the project with the following content:
 
 ```
 DB_ROOT_URI=mongodb://localhost:27017
