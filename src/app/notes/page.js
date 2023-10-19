@@ -1,7 +1,6 @@
 'use client'
 import { API_ROOT } from '@/constants/constants'
 import { decodeJWT } from '@/lib/utils'
-import { redirect } from 'next/dist/server/api-utils'
 import Link from 'next/link'
 import NotesList from '@/app/components/NotesList'
 import { useEffect, useState } from 'react'
@@ -11,7 +10,6 @@ export default function Notes() {
 	const [notes, setNotes] = useState(null)
 	const [isLoading, setLoading] = useState(true)
 	const [currentUser, setCurrentUser] = useState(null)
-	const [newNote, setNewNote] = useState({ title: '', body: '' })
 
 	useEffect(() => {
 		const jwt = localStorage.getItem('jwt')

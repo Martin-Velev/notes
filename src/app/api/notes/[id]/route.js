@@ -2,7 +2,6 @@ import Note from '@/models/note'
 import dbConnect from '@/lib/dbConnect'
 
 export async function GET(req, params) {
-	const payload = await req.json()
 	const id = params.params.id
 	if (!id) {
 		return new Response(null, {
