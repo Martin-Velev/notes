@@ -27,7 +27,7 @@ export const DEFAULT_HEADER = {
 export async function createToken({ id, username }, secret) {
 	const header = DEFAULT_HEADER
 	const payload = {
-		sub: id,
+		id,
 		name: username,
 		iat: Date.now(),
 		exp: Date.now() + TOKEN_TIMEOUT
@@ -51,14 +51,6 @@ export async function signMsg(msg, secret) {
 	const hmac = await crypto.createHmac('sha256', secret)
 	hmac.update(msg) // feed the message to the Hmac object
 	return hmac.digest('base64url') // reed the signed message
-}
-
-export function exctractToken(headers) {
-	const authHeader = headers.get('Authorization')
-	if (authHeader && authHeader.startsWith('Bearer ')) {
-		return authHeader.substring(7)
-	}
-	return null
 }
 
 export async function verifyToken(token, secret) {

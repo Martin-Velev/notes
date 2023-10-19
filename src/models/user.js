@@ -16,13 +16,12 @@ const userSchema = new mongoose.Schema({
 		min: 8,
 		select: false, //dont send back password after request
 	},
-	role: {
-		type: String,
-		default: 'user',
-		enum: {
-			values: ['user', 'admin'],
+	notes: [
+		{
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'Note',
 		},
-	},
+	],
 	createdAt: {
 		type: Date,
 		default: Date.now,
@@ -43,5 +42,5 @@ userSchema.methods.comparePassword = async function (enteredPassword) {
 	return await bcrypt.compare(enteredPassword, this.password)
 }
 
-const User = mongoose.models.User || mongoose.model("User", UserSchema);
+const User = mongoose.models.User || mongoose.model('User', userSchema)
 export default User
