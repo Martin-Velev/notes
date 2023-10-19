@@ -2,7 +2,7 @@
 
 Install dependancies:
 
-```
+```bash
 npm install
 # or
 yarn install
