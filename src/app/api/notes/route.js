@@ -8,8 +8,6 @@ import mongoose from 'mongoose'
 
 async function fetchUserByID(id) {
 	const user = await User.findById(id)
-	console.log('usr', user)
-
 	return user
 }
 
@@ -30,9 +28,7 @@ export async function GET(req, params) {
 
 	// fetch user by id
 	const user = await fetchUserByID(userid)
-	console.log('user by id', user.notes)
 	const noteIDs = user.notes
-	console.log('noteIDS', noteIDs)
 
 	if (!noteIDs || noteIDs.length < 1) {
 		const headers = new Headers()
@@ -45,8 +41,6 @@ export async function GET(req, params) {
 		},
 	})
 
-	console.log('found notes', notes)
-
 	const headers = new Headers()
 	headers.append('Content-Type', 'application/json')
 	return new Response(JSON.stringify(notes), { headers })
@@ -54,9 +48,6 @@ export async function GET(req, params) {
 
 export async function POST(req, params) {
 	const newNote = await req.json()
-	console.log('req body', newNote)
-
-	console.log('POST')
 	dbConnect()
 
 	const note = await Note.create(newNote)
@@ -78,11 +69,9 @@ export async function POST(req, params) {
 	// fetch user by id
 	const user = await fetchUserByID(userid)
 
-	console.log('fetched Usr', user)
 
 	const oldNotes = user.notes
 	user.notes = [...oldNotes, note]
-	console.log('updated usr', user)
 	user.save()
 
 	const headers = new Headers()

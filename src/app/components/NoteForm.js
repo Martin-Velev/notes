@@ -1,8 +1,10 @@
 import { API_ROOT } from '@/constants/constants'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 export default function NoteForm(props) {
-	const [note, setNote] = useState(props.note)
+	const [note, setNote] = useState(props.note || { title: '', body: '' })
+	const router = useRouter()
 
 	function handleTitleChange(e) {
 		setNote({
@@ -17,10 +19,8 @@ export default function NoteForm(props) {
 		})
 	}
 
-	function handleSubmit(e) {
-		e.preventDefault()
+	function updateNote(note) {
 		const jwt = localStorage.getItem('jwt')
-		console.log('note ID', note._id)
 		fetch(`${API_ROOT}/notes/${note._id}`, {
 			method: 'PUT',
 			headers: {
@@ -32,23 +32,47 @@ export default function NoteForm(props) {
 		})
 	}
 
+	function createNote(note) {
+		const jwt = localStorage.getItem('jwt')
+		fetch(`${API_ROOT}/notes`, {
+			method: 'POST',
+			headers: {
+				Authorization: 'JWT ' + jwt,
+				'Access-Control-Allow-Origin': 'http://localhost:3000',
+			},
+
+			body: JSON.stringify(note),
+		})
+	}
+
+	function handleSubmit(e) {
+		if (note._id) {
+			updateNote(note)
+		} else {
+			createNote(note)
+		}
+		e.preventDefault()
+	}
+
 	return (
 		<div>
 			<form onSubmit={handleSubmit}>
 				<input
-					// value={query}
+					value={note.title}
 					onChange={handleTitleChange}
 					onKeyDown={(e) => e.key == 'Enter' && handleSubmit(e)}
 					placeholder="Title"
 				/>
 
+				<br />
 				<textarea
-					// value={query}
+					value={note.body}
 					onChange={handleBodyChange}
 					onKeyDown={(e) => e.key == 'Enter' && handleSubmit(e)}
 					placeholder="Title"
 				/>
 
+				<br />
 				<button type="submit">Save</button>
 			</form>
 		</div>

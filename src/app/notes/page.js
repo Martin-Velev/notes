@@ -5,11 +5,13 @@ import { redirect } from 'next/dist/server/api-utils'
 import Link from 'next/link'
 import NotesList from '@/app/components/NotesList'
 import { useEffect, useState } from 'react'
+import NoteForm from '../components/NoteForm'
 
 export default function Notes() {
 	const [notes, setNotes] = useState(null)
 	const [isLoading, setLoading] = useState(true)
 	const [currentUser, setCurrentUser] = useState(null)
+	const [newNote, setNewNote] = useState({ title: '', body: '' })
 
 	useEffect(() => {
 		const jwt = localStorage.getItem('jwt')
@@ -18,7 +20,6 @@ export default function Notes() {
 			setLoading(false)
 			return
 		}
-		console.log('local JWT', jwt)
 		const { id, name } = decodeJWT(jwt)
 		setCurrentUser({ id, name })
 		fetch(`${API_ROOT}/notes`, {
@@ -30,7 +31,6 @@ export default function Notes() {
 		})
 			.then((res) => res.json())
 			.then((notes) => {
-				console.log('notes result', notes)
 				setNotes(notes)
 				setLoading(false)
 			})
@@ -53,19 +53,6 @@ export default function Notes() {
 		return signinPrompt
 	}
 
-	function handleCreateNote() {
-		const jwt = localStorage.getItem('jwt')
-		fetch(`${API_ROOT}/notes`, {
-			method: 'POST',
-			headers: {
-				Authorization: 'JWT ' + jwt,
-				'Access-Control-Allow-Origin': 'http://localhost:3000',
-			},
-
-			body: JSON.stringify({ title: 'test', body: 'test' }),
-		})
-	}
-
 	return (
 		<>
 			<h1>Notes</h1>
@@ -73,7 +60,8 @@ export default function Notes() {
 			<NotesList notes={notes} />
 			<br />
 			<div>
-				<button onClick={handleCreateNote}>Create Note</button>
+				Create new Note:
+				<NoteForm />
 			</div>
 		</>
 	)

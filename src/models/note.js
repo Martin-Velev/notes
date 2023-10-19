@@ -3,7 +3,6 @@ import mongoose from 'mongoose'
 const noteSchema = new mongoose.Schema({
 	title: {
 		type: String,
-		required: [true],
 	},
 	body: {
 		type: String,
@@ -14,5 +13,4 @@ const noteSchema = new mongoose.Schema({
 	},
 })
 
-// const User = mongoose.models.User || mongoose.model('User', userSchema)
 export default mongoose.models.Note || mongoose.model('Note', noteSchema)

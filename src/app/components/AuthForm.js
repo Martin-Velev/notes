@@ -1,6 +1,7 @@
 'use client'
 
 import { API_ROOT } from '@/constants/constants'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 const VARIANT_TABLE = {
@@ -19,6 +20,7 @@ const VARIANT_TABLE = {
 export default function AuthForm({ variant = 'signup' }) {
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
+	const router = useRouter()
 
 	const variantData = VARIANT_TABLE[variant]
 
@@ -34,6 +36,7 @@ export default function AuthForm({ variant = 'signup' }) {
 		const { jwt } = body
 		if (jwt) {
 			localStorage.setItem('jwt', jwt)
+			router.push('/notes')
 		}
 	}
 

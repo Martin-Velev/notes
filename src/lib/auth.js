@@ -30,7 +30,7 @@ export async function createToken({ id, username }, secret) {
 		id,
 		name: username,
 		iat: Date.now(),
-		exp: Date.now() + TOKEN_TIMEOUT
+		exp: Date.now() + TOKEN_TIMEOUT,
 	}
 
 	const encodedHeader = encode(JSON.stringify(header))
@@ -41,9 +41,6 @@ export async function createToken({ id, username }, secret) {
 
 	const token = msg + '.' + signature
 
-	console.log('secret', secret)
-	console.log('payload', payload)
-	console.log('token', token)
 	return token
 }
 

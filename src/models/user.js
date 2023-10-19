@@ -2,8 +2,6 @@ import { saltAndHash } from '@/lib/auth'
 import mongoose from 'mongoose'
 import bcrypt from 'bcrypt'
 
-console.log('creating schema')
-
 const userSchema = new mongoose.Schema({
 	username: {
 		type: String,

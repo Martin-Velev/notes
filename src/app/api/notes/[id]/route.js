@@ -3,7 +3,6 @@ import dbConnect from '@/lib/dbConnect'
 
 export async function GET(req, params) {
 	const payload = await req.json()
-	console.log('GET req', payload._id)
 	const id = params.params.id
 	if (!id) {
 		return new Response(null, {
@@ -29,11 +28,20 @@ export async function GET(req, params) {
 export async function PUT(req, { params }) {
 	const { id } = params
 	const { title, body } = await req.json()
-	console.log('PUT', title, body)
 
 	await Note.findOneAndUpdate({ _id: id }, { title, body })
 	const updatedNote = await Note.find({ _id: id })
-	console.log('updated', updatedNote)
+
+	const headers = new Headers()
+	headers.append('Content-Type', 'application/json')
+	return new Response(JSON.stringify(updatedNote), { headers })
+}
+
+export async function DELETE(req, { params }) {
+	const { id } = params
+
+	await Note.findByIdAndDelete(id)
+	const updatedNote = await Note.find({ _id: id })
 
 	const headers = new Headers()
 	headers.append('Content-Type', 'application/json')

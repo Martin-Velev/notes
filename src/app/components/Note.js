@@ -1,10 +1,9 @@
 import { useState } from 'react'
 import NoteForm from '@/app/components/NoteForm'
+import { API_ROOT } from '@/constants/constants'
 
 export default function Note({ note }) {
 	const [editMode, setEditMode] = useState(false)
-
-	console.log('note prop', note)
 
 	const noteDisplay = (
 		<div>
@@ -14,6 +13,16 @@ export default function Note({ note }) {
 	)
 
 	const noteEdit = <NoteForm note={{ ...note }} />
+	function deleteNote(note) {
+		const jwt = localStorage.getItem('jwt')
+		fetch(`${API_ROOT}/notes/${note._id}`, {
+			method: 'DELETE',
+			headers: {
+				Authorization: 'JWT ' + jwt,
+				'Access-Control-Allow-Origin': 'http://localhost:3000',
+			},
+		})
+	}
 
 	return (
 		<>
@@ -23,6 +32,8 @@ export default function Note({ note }) {
 				<button onClick={() => setEditMode(!editMode)}>
 					{editMode ? 'View' : 'Edit'}
 				</button>
+
+				<button onClick={() => deleteNote(note)}>Delete</button>
 			</div>
 		</>
 	)
