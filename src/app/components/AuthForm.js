@@ -20,6 +20,7 @@ const VARIANT_TABLE = {
 export default function AuthForm({ variant = 'signup' }) {
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
+	const [errMsg, setErrMsg] = useState(null)
 	const router = useRouter()
 
 	const variantData = VARIANT_TABLE[variant]
@@ -32,6 +33,9 @@ export default function AuthForm({ variant = 'signup' }) {
 				password,
 			}),
 		})
+		if (response.status === 401) {
+			setErrMsg('Incorrect login')
+		}
 		const body = await response.json()
 		const { jwt } = body
 		if (jwt) {
@@ -64,6 +68,8 @@ export default function AuthForm({ variant = 'signup' }) {
 					{variantData.submitBtn}
 				</button>
 			</form>
+
+			{errMsg}
 		</>
 	)
 }
