@@ -1,4 +1,13 @@
 ## Getting Started
+
+Install dependancies:
+
+```
+npm install
+# or
+yarn install
+```
+
 Run the development server:
 
 ```bash
