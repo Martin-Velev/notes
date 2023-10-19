@@ -26,6 +26,10 @@ export default function AuthForm({ variant = 'signup' }) {
 	const variantData = VARIANT_TABLE[variant]
 
 	async function onSubmit() {
+		if(!username || !password) {
+			setErrMsg('Username and password are required')
+			return
+		}
 		const response = await fetch(variantData.endpoint, {
 			method: 'POST',
 			body: JSON.stringify({
@@ -35,6 +39,7 @@ export default function AuthForm({ variant = 'signup' }) {
 		})
 		if (response.status === 401) {
 			setErrMsg('Incorrect login')
+			return
 		}
 		const body = await response.json()
 		const { jwt } = body
