@@ -25,8 +25,9 @@ export default function AuthForm({ variant = 'signup' }) {
 
 	const variantData = VARIANT_TABLE[variant]
 
-	async function onSubmit() {
-		if(!username || !password) {
+	async function onSubmit(e) {
+		e.preventDefault()
+		if (!username || !password) {
 			setErrMsg('Username and password are required')
 			return
 		}
@@ -37,8 +38,9 @@ export default function AuthForm({ variant = 'signup' }) {
 				password,
 			}),
 		})
-		if (response.status === 401) {
-			setErrMsg('Incorrect login')
+		if (response.status >= 400) {
+			console.log('msg', response.statusText)
+			setErrMsg(response.statusText)
 			return
 		}
 		const body = await response.json()
@@ -52,7 +54,10 @@ export default function AuthForm({ variant = 'signup' }) {
 	return (
 		<>
 			<h2>{variantData.header}</h2>
-			<form>
+			<form
+				onKeyDown={(e) => e.key == 'Enter' && onSubmit(e)}
+				onSubmit={onSubmit}
+			>
 				<label htmlFor="username">Username:</label>
 				<input
 					style={{ color: 'black' }}
@@ -69,9 +74,7 @@ export default function AuthForm({ variant = 'signup' }) {
 					type="password"
 				/>
 				<br />
-				<button onClick={onSubmit} type="button">
-					{variantData.submitBtn}
-				</button>
+				<button type="submit">{variantData.submitBtn}</button>
 			</form>
 
 			{errMsg}
