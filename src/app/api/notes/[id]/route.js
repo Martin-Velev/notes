@@ -9,6 +9,15 @@ export async function GET(req, params) {
 			statusText: 'Bad Request',
 		})
 	}
+
+	const jwt = extractJWT(req.headers)
+	const istokenvalid = await verifyToken(jwt, SECRET)
+	if (!istokenvalid) {
+		const res = new response()
+		res.statuscode = 401 // unauthorized status code
+		res.headers.append('content-type', 'text/plain')
+		return res
+	}
 	dbConnect()
 
 	const note = await Note.findById(id)
@@ -25,6 +34,15 @@ export async function GET(req, params) {
 }
 
 export async function PUT(req, { params }) {
+	const jwt = extractJWT(req.headers)
+	const istokenvalid = await verifyToken(jwt, SECRET)
+	if (!istokenvalid) {
+		const res = new response()
+		res.statuscode = 401 // unauthorized status code
+		res.headers.append('content-type', 'text/plain')
+		return res
+	}
+
 	const { id } = params
 	const { title, body } = await req.json()
 
@@ -37,6 +55,15 @@ export async function PUT(req, { params }) {
 }
 
 export async function DELETE(req, { params }) {
+	const jwt = extractJWT(req.headers)
+	const istokenvalid = await verifyToken(jwt, SECRET)
+	if (!istokenvalid) {
+		const res = new response()
+		res.statuscode = 401 // unauthorized status code
+		res.headers.append('content-type', 'text/plain')
+		return res
+	}
+
 	const { id } = params
 
 	await Note.findByIdAndDelete(id)

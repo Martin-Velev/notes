@@ -39,7 +39,6 @@ export default function AuthForm({ variant = 'signup' }) {
 			}),
 		})
 		if (response.status >= 400) {
-			console.log('msg', response.statusText)
 			setErrMsg(response.statusText)
 			return
 		}
