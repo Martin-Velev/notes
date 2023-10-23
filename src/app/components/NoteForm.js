@@ -29,6 +29,8 @@ export default function NoteForm(props) {
 			},
 
 			body: JSON.stringify(note),
+		}).then(() => {
+			props.onSubmit()
 		})
 	}
 
@@ -42,7 +44,7 @@ export default function NoteForm(props) {
 			},
 
 			body: JSON.stringify(note),
-		})
+		}).then(() => props.onSubmit())
 	}
 
 	function handleSubmit(e) {
@@ -69,7 +71,7 @@ export default function NoteForm(props) {
 					value={note.body}
 					onChange={handleBodyChange}
 					onKeyDown={(e) => e.key == 'Enter' && handleSubmit(e)}
-					placeholder="Title"
+					placeholder="Body"
 				/>
 
 				<br />

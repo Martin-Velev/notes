@@ -4,7 +4,6 @@ import User from '@/models/user'
 import { decodeJWT, extractJWT } from '@/lib/utils'
 import { verifyToken } from '@/lib/auth'
 import { SECRET } from '@/constants/constants'
-import mongoose from 'mongoose'
 
 async function fetchUserByID(id) {
 	const user = await User.findById(id)

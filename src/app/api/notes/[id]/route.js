@@ -1,5 +1,8 @@
 import Note from '@/models/note'
 import dbConnect from '@/lib/dbConnect'
+import { decodeJWT, extractJWT } from '@/lib/utils'
+import { verifyToken } from '@/lib/auth'
+import { SECRET } from '@/constants/constants'
 
 export async function GET(req, params) {
 	const id = params.params.id

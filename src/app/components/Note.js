@@ -2,7 +2,7 @@ import { useState } from 'react'
 import NoteForm from '@/app/components/NoteForm'
 import { API_ROOT } from '@/constants/constants'
 
-export default function Note({ note }) {
+export default function Note({ note, onSubmit }) {
 	const [editMode, setEditMode] = useState(false)
 
 	const noteDisplay = (
@@ -12,7 +12,7 @@ export default function Note({ note }) {
 		</div>
 	)
 
-	const noteEdit = <NoteForm note={{ ...note }} />
+	const noteEdit = <NoteForm onSubmit={onSubmit} note={{ ...note }} />
 	function deleteNote(note) {
 		const jwt = localStorage.getItem('jwt')
 		fetch(`${API_ROOT}/notes/${note._id}`, {
@@ -21,7 +21,7 @@ export default function Note({ note }) {
 				Authorization: 'JWT ' + jwt,
 				'Access-Control-Allow-Origin': 'http://localhost:3000',
 			},
-		})
+		}).then(() => onSubmit())
 	}
 
 	return (

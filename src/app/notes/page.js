@@ -11,6 +11,22 @@ export default function Notes() {
 	const [isLoading, setLoading] = useState(true)
 	const [currentUser, setCurrentUser] = useState(null)
 
+	async function fetchData() {
+		const jwt = localStorage.getItem('jwt')
+		const response = await fetch(`${API_ROOT}/notes`, {
+			method: 'GET',
+			headers: {
+				Authorization: 'JWT ' + jwt,
+				'Access-Control-Allow-Origin': 'http://localhost:3000',
+			},
+		})
+		console.log('fetching', response)
+		const fetchedNotes = await response.json()
+		setNotes(null)
+		setNotes(fetchedNotes)
+		setLoading(false)
+	}
+
 	useEffect(() => {
 		const jwt = localStorage.getItem('jwt')
 		if (!jwt) {
@@ -20,18 +36,7 @@ export default function Notes() {
 		}
 		const { id, name } = decodeJWT(jwt)
 		setCurrentUser({ id, name })
-		fetch(`${API_ROOT}/notes`, {
-			method: 'GET',
-			headers: {
-				Authorization: 'JWT ' + jwt,
-				'Access-Control-Allow-Origin': 'http://localhost:3000',
-			},
-		})
-			.then((res) => res.json())
-			.then((notes) => {
-				setNotes(notes)
-				setLoading(false)
-			})
+		fetchData()
 	}, [])
 
 	const loadingScreen = 'Loading...'
@@ -55,11 +60,11 @@ export default function Notes() {
 		<>
 			<h1>Notes</h1>
 
-			<NotesList notes={notes} />
+			<NotesList onSubmit={fetchData} notes={notes} />
 			<br />
 			<div>
 				Create new Note:
-				<NoteForm />
+				<NoteForm onSubmit={fetchData} />
 			</div>
 		</>
 	)
